@@ -26,6 +26,7 @@ class Motor(Kendaraan):
         self.oli_interval = 2000
         self.odometer = 0
         self.oli_terakhir = 0
+        self.maintenance_terakhir = 0
 
     def update_odo(self, odo_baru):
         self.odometer_lama = self.odometer
@@ -40,14 +41,16 @@ class Motor(Kendaraan):
 
     def status_oli(self):
         if (self.odometer - self.oli_terakhir) >= self.oli_interval:
-            print("Penting! Jangan lupa ganti oli jir udah 2000km ini")
+            print(
+                f"Penting! Jangan lupa ganti oli jir udah terlewat {self.odometer - self.oli_terakhir}km ini"
+            )
         else:
             jarak_oli = self.oli_interval - (self.odometer - self.oli_terakhir)
             print(f"Aman aja, masih sisa {jarak_oli}km lagi kok!")
 
     def update_maintenance(self):
         self.maintenance_terakhir = self.odometer
-        print(f"Maintenance telah dilakukan! Odometer: {self.odometer}")
+        print(f"Maintenance telah dilakukan! Odometer: {self.maintenance_terakhir}")
 
     def status_maintenance(self):
         if self.kategori == "Matic":
@@ -216,7 +219,6 @@ def main():
 
             elif pilihan == "3":
                 while True:
-                    os.system("cls")
                     my_garage.tunjukkan_kendaraan()
                     get_id = input_angka("Masukkan ID (0 Untuk Keluar): ")
                     if get_id == 0:
@@ -233,8 +235,16 @@ def main():
                         print(f"Kendaraan dengan ID {get_id} tidak ditemukan.")
 
             elif pilihan == "4":
-                # Tips: Cari kendaraan by ID, terus panggil status_oli() dan status_maintenance()
-                pass
+                while True:
+                    my_garage.tunjukkan_kendaraan()
+                    get_id = input_angka("Masukkan ID (0 Untuk Keluar): ")
+                    if get_id == 0:
+                        print("\nUpdate dibatalkan, kembali ke menu utama.")
+                        break
+                    for k in my_garage.daftar_kendaraan:
+                        if get_id == k.id:
+                            k.status_oli()
+                            k.status_maintenance()
 
             elif pilihan == "5":
                 # Tips: Buat sub-menu mau update_oli() atau update_maintenance()
