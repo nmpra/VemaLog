@@ -86,12 +86,12 @@ class Garasi:
 
     def tunjukkan_kendaraan(self):
         if not self._daftar_kendaraan:
-            raise IndexError("Garasi Anda Kosong.")
+            raise ValueError("Garasi Anda Kosong.")
         return self._daftar_kendaraan
 
     def tambah_kendaraan(self, obj_kendaraan):
         if len(self._daftar_kendaraan) >= 3:
-            raise IndexError("Garasi anda penuh.")
+            raise RuntimeError("Garasi anda penuh.")
 
         obj_kendaraan.id = self._gid
         self._daftar_kendaraan.append(obj_kendaraan)
@@ -100,7 +100,7 @@ class Garasi:
     def hapus_kendaraan(self, id):
         target = self.cari_kendaraan(id)
         if target is None:
-            raise ValueError(f"Kendaraan dengan ID {id} tidak ditemukan.")
+            raise KeyError(f"Kendaraan dengan ID {id} tidak ditemukan.")
         self._daftar_kendaraan.remove(target)
 
 
