@@ -87,18 +87,11 @@ class Garasi:
     def tunjukkan_kendaraan(self):
         if not self._daftar_kendaraan:
             raise IndexError("Garasi Anda Kosong.")
-        print("\n" + "=" * 65)
-        print("                         GARASI")
-        print("=" * 65)
-        for k in self._daftar_kendaraan:
-            print(
-                f"| {str(k.id):<3} | {k.nama:<20} | {str(k.cc):<5}cc | {k.plat:<12} | {k._odometer:<7}km |"
-            )
-        print("=" * 65)
+        return self._daftar_kendaraan
 
     def tambah_kendaraan(self, obj_kendaraan):
         if len(self._daftar_kendaraan) >= 3:
-            raise IndexError("Garansi anda penuh.")
+            raise IndexError("Garasi anda penuh.")
 
         obj_kendaraan.id = self._gid
         self._daftar_kendaraan.append(obj_kendaraan)
@@ -109,7 +102,6 @@ class Garasi:
         if target is None:
             raise ValueError(f"Kendaraan dengan ID {id} tidak ditemukan.")
         self._daftar_kendaraan.remove(target)
-        print(f"Kendaraan dengan ID {id} telah berhasil dihapus dari garasi!")
 
 
 def input_string(pesan, min_len=0):
@@ -174,7 +166,17 @@ def main():
 
             if pilihan == "1":
                 os.system("cls")
+
                 my_garage.tunjukkan_kendaraan()
+                print("\n" + "=" * 65)
+                print("                         GARASI")
+                print("=" * 65)
+                for k in my_garage._daftar_kendaraan:
+                    print(
+                        f"| {str(k.id):<3} | {k.nama:<20} | {str(k.cc):<5}cc | {k.plat:<12} | {k._odometer:<7}km |"
+                    )
+                print("=" * 65)
+
                 while True:
                     keluar = input_angka("Ketik '0' untuk keluar: ")
                     if keluar == 0:
