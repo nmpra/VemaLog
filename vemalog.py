@@ -131,6 +131,15 @@ def input_angka(pesan, min_len=0):
             print("Input harus berupa ANGKA.")
 
 
+def input_choice(pesan, choices):
+    while True:
+        data = input(pesan).capitalize()
+        if data in choices:
+            return data
+        print(f"Input salah, input harus berupa salah satu dari: {', '.join(choices)}")
+        continue
+
+
 def data_dummy(garasi):
     motor1 = Motor("Vario 160 eSP+", 160, "H 1234 ABC", "Matic")
     motor2 = Motor("ZX-25RR", 250, "B 3344 SSS", "Kopling")
@@ -187,30 +196,18 @@ def main():
             elif pilihan == "2":
                 os.system("cls")
                 while True:
-                    try:
-                        jenis_kendaraan = input_string(
-                            "Masukkan jenis kendaraan (Motor/Mobil): "
-                        ).capitalize()
-                        jenis_valid = ["Motor", "Mobil"]
-                        if jenis_kendaraan not in jenis_valid:
-                            raise ValueError(
-                                f"Kategori tidak valid! Masukkan kategori yang valid {jenis_valid}."
-                            )
-                    except (ValueError, IndexError, Exception) as e:
-                        print(f"\nError! Pesan: {e}\n")
-
+                    jenis_kendaraan = input_choice(
+                        "Masukkan jenis kendaraan (Motor/Mobil): ",
+                        choices=["Motor", "Mobil"],
+                    ).capitalize()
                     if jenis_kendaraan == "Motor":
                         nama = input_string("Masukkan Nama: ", min_len=3).capitalize()
                         cc = input_angka("Masukkan CC: ", min_len=2)
                         plat = input_string("Masukkan Plat Nomor:: ", min_len=3).upper()
-                        kategori = input_string(
-                            "Masukkan Kategori (Matic/Manual/Kopling): "
+                        kategori = input_choice(
+                            "Masukkan Kategori (Matic/Manual/Kopling): ",
+                            choices=["Matic", "Manual", "Kopling"],
                         ).capitalize()
-                        kategori_valid = ["Matic", "Manual", "Kopling"]
-                        if kategori not in kategori_valid:
-                            raise ValueError(
-                                f"Kategori tidak valid! Masukkan kategori yang valid {kategori_valid}"
-                            )
                         motor = Motor(nama, cc, plat, kategori)
                         my_garage.tambah_kendaraan(motor)
                         print(
