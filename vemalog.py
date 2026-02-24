@@ -140,6 +140,23 @@ def input_choice(pesan, choices):
         continue
 
 
+def vehicle_tabble(vehicle_list):
+    if not vehicle_list:
+        print("There is no vehicle in the garage.")
+        return
+
+    print("\n" + "=" * 65)
+    print(f"{"GARASI":^65}")
+    print("=" * 65)
+
+    for k in vehicle_list:
+        print(
+            f"| {str(k.id):<3} | {k.nama:<20} | {str(k.cc):<5}cc | {k.plat:<12} | {k._odometer:<7}km |"
+        )
+
+    print("=" * 65)
+
+
 def data_dummy(garasi):
     motor1 = Motor("Vario 160 eSP+", 160, "H 1234 ABC", "Matic")
     motor2 = Motor("ZX-25RR", 250, "B 3344 SSS", "Kopling")
@@ -175,17 +192,8 @@ def main():
 
             if pilihan == "1":
                 os.system("cls")
-
-                my_garage.tunjukkan_kendaraan()
-                print("\n" + "=" * 65)
-                print("                         GARASI")
-                print("=" * 65)
-                for k in my_garage._daftar_kendaraan:
-                    print(
-                        f"| {str(k.id):<3} | {k.nama:<20} | {str(k.cc):<5}cc | {k.plat:<12} | {k._odometer:<7}km |"
-                    )
-                print("=" * 65)
-
+                garasi = my_garage.tunjukkan_kendaraan()
+                vehicle_tabble(garasi)
                 while True:
                     keluar = input_angka("Ketik '0' untuk keluar: ")
                     if keluar == 0:
@@ -220,7 +228,8 @@ def main():
             elif pilihan == "3":
                 os.system("cls")
                 while True:
-                    my_garage.tunjukkan_kendaraan()
+                    garasi = my_garage.tunjukkan_kendaraan()
+                    vehicle_tabble(garasi)
                     get_id = input_angka("Masukkan ID (0 Untuk Keluar): ")
                     if get_id == 0:
                         print("\nUpdate dibatalkan, kembali ke menu utama.")
@@ -238,7 +247,8 @@ def main():
             elif pilihan == "4":
                 os.system("cls")
                 while True:
-                    my_garage.tunjukkan_kendaraan()
+                    garasi = my_garage.tunjukkan_kendaraan()
+                    vehicle_tabble(garasi)
                     get_id = input_angka("Masukkan ID (0 Untuk Keluar): ")
                     if get_id == 0:
                         print("\nUpdate dibatalkan, kembali ke menu utama.")
