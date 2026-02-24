@@ -10,17 +10,9 @@ class Kendaraan:
         self.plat = plat
         self.jenis = jenis
 
-    def __repr__(self):
-        return f"{self.nama} {self.cc}cc ({self.plat})"
-
 
 class Motor(Kendaraan):
     def __init__(self, nama, cc, plat, kategori):
-        kategori_valid = ["Matic", "Manual", "Kopling"]
-        if kategori not in kategori_valid:
-            raise ValueError(
-                f"Kategori tidak valid! Masukkan kategori yang valid {kategori_valid}"
-            )
         super().__init__(nama, cc, plat, jenis="Motor")
         self.kategori = kategori
         self._oli_interval = 2000
@@ -37,40 +29,38 @@ class Motor(Kendaraan):
 
     def update_oli(self):
         self._oli_terakhir = self._odometer
-        print(f"Oli berhasil diganti! Odometer: {self._odometer}")
+        return self._oli_terakhir
 
     def status_oli(self):
         if (self._odometer - self._oli_terakhir) >= self._oli_interval:
-            print(
-                f"Penting! Jangan lupa ganti oli jir udah terlewat {self._odometer - self._oli_terakhir}km ini"
-            )
+            return False
         else:
             jarak_oli = self._oli_interval - (self._odometer - self._oli_terakhir)
-            print(f"Aman aja, masih sisa {jarak_oli}km lagi kok!")
+            return True, jarak_oli
 
     def update_maintenance(self):
         self._maintenance_terakhir = self._odometer
-        print(f"Maintenance telah dilakukan! Odometer: {self._maintenance_terakhir}")
+        return self._maintenance_terakhir
 
     def status_maintenance(self):
         if self.kategori == "Matic":
             interval_maintenance = 8000
             if (self._odometer - self._maintenance_terakhir) >= interval_maintenance:
-                print("Penting! Segera ke bengkel untuk maintenance berkala kendaraan.")
+                return False
             else:
                 jarak_maintenance = interval_maintenance - (
                     self._odometer - self._maintenance_terakhir
                 )
-                print(f"Aman aja, masih sisa {jarak_maintenance}km lagi kok!")
+                return True, jarak_maintenance
         elif self.kategori in ["Manual", "Kopling"]:
             interval_maintenance = 5000
             if (self._odometer - self._maintenance_terakhir) >= interval_maintenance:
-                print("Penting! Segera ke bengkel untuk maintenance berkala kendaraan.")
+                return False
             else:
                 jarak_maintenance = interval_maintenance - (
                     self._odometer - self._maintenance_terakhir
                 )
-                print(f"Aman aja, masih sisa {jarak_maintenance}km lagi kok!")
+                return True, jarak_maintenance
 
 
 class Garasi:
@@ -219,7 +209,7 @@ def main():
                         motor = Motor(nama, cc, plat, kategori)
                         my_garage.tambah_kendaraan(motor)
                         print(
-                            f"\nKendaraan {motor} telah berhasil ditambahkan dengan ID {motor.id}."
+                            f"\nKendaraan {motor.nama} telah berhasil ditambahkan dengan ID {motor.id}."
                         )
 
                     elif jenis_kendaraan == "Mobil":
@@ -256,17 +246,29 @@ def main():
                     for k in my_garage._daftar_kendaraan:
                         if get_id == k.id:
                             k.status_oli()
+                            if not k.status_oli():
+                                print(
+                                    f"Penting! Jangan lupa ganti oli jir udah terlewat {k._odometer - k._oli_terakhir}km ini"
+                                )
+                            else:
+                                print(f"Aman aja, masih sisa {k.jarak_oli}km lagi kok!")
                             k.status_maintenance()
+                            if not k.status_maintenance():
+                                print(
+                                    "Penting! Segera ke bengkel untuk maintenance berkala kendaraan."
+                                )
+                            else:
+                                print(
+                                    f"Aman aja, masih sisa {k.jarak_maintenance}km lagi kok!"
+                                )
                             break
                     else:
                         print(f"Kendaraan dengan ID {get_id} tidak ditemukan.")
 
             elif pilihan == "5":
-                # Tips: Buat sub-menu mau update_oli() atau update_maintenance()
                 pass
 
             elif pilihan == "6":
-                # Tips: Minta input ID buat dihapus
                 pass
 
             elif pilihan == "0":
@@ -276,7 +278,7 @@ def main():
             else:
                 print("\nPilihan tidak valid.")
 
-        except (ValueError, IndexError, Exception) as e:
+        except Exception as e:
             print(f"\nError! Pesan: {e}")
 
 
