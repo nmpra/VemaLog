@@ -1,60 +1,8 @@
 # Vehicle Maintenance Log Project
+
 import os
-
+import utility as u
 from models import Kendaraan, Motor, Garasi
-
-
-def input_string(pesan, min_len=0):
-    while True:
-        data = input(pesan).strip()
-        if not data:
-            print("Input tidak boleh KOSONG.")
-            continue
-        if len(data) < min_len:
-            print(f"Input terlalu pendek, minimal {min_len} karakter.")
-            continue
-        return data
-
-
-def input_angka(pesan, min_len=0):
-    while True:
-        data = input(pesan).strip()
-        if not data:
-            print("Input tidak boleh KOSONG.")
-            continue
-        if len(data) < min_len:
-            print(f"Input terlalu pendek, minimal {min_len} karakter.")
-            continue
-        try:
-            return int(data)
-        except ValueError:
-            print("Input harus berupa ANGKA.")
-
-
-def input_choice(pesan, choices):
-    while True:
-        data = input(pesan).capitalize()
-        if data in choices:
-            return data
-        print(f"Input salah, input harus berupa salah satu dari: {', '.join(choices)}")
-        continue
-
-
-def vehicle_tabble(vehicle_list):
-    if not vehicle_list:
-        print("There is no vehicle in the garage.")
-        return
-
-    print("\n" + "=" * 65)
-    print(f"{"GARASI":^65}")
-    print("=" * 65)
-
-    for k in vehicle_list:
-        print(
-            f"| {str(k.id):<3} | {k.nama:<20} | {str(k.cc):<5}cc | {k.plat:<12} | {k._odometer:<7}km |"
-        )
-
-    print("=" * 65)
 
 
 def data_dummy(garasi):
@@ -93,9 +41,9 @@ def main():
             if pilihan == "1":
                 os.system("cls")
                 garasi = my_garage.tunjukkan_kendaraan()
-                vehicle_tabble(garasi)
+                u.vehicle_table(garasi)
                 while True:
-                    keluar = input_angka("Ketik '0' untuk keluar: ")
+                    keluar = u.input_angka("Ketik '0' untuk keluar: ")
                     if keluar == 0:
                         break
                     else:
@@ -104,15 +52,17 @@ def main():
             elif pilihan == "2":
                 os.system("cls")
                 while True:
-                    jenis_kendaraan = input_choice(
+                    jenis_kendaraan = u.input_choice(
                         "Masukkan jenis kendaraan (Motor/Mobil): ",
                         choices=["Motor", "Mobil"],
                     ).capitalize()
                     if jenis_kendaraan == "Motor":
-                        nama = input_string("Masukkan Nama: ", min_len=3).capitalize()
-                        cc = input_angka("Masukkan CC: ", min_len=2)
-                        plat = input_string("Masukkan Plat Nomor:: ", min_len=3).upper()
-                        kategori = input_choice(
+                        nama = u.input_string("Masukkan Nama: ", min_len=3).capitalize()
+                        cc = u.input_angka("Masukkan CC: ", min_len=2)
+                        plat = u.input_string(
+                            "Masukkan Plat Nomor:: ", min_len=3
+                        ).upper()
+                        kategori = u.input_choice(
                             "Masukkan Kategori (Matic/Manual/Kopling): ",
                             choices=["Matic", "Manual", "Kopling"],
                         ).capitalize()
@@ -129,14 +79,14 @@ def main():
                 os.system("cls")
                 while True:
                     garasi = my_garage.tunjukkan_kendaraan()
-                    vehicle_tabble(garasi)
-                    get_id = input_angka("Masukkan ID (0 Untuk Keluar): ")
+                    u.vehicle_table(garasi)
+                    get_id = u.input_angka("Masukkan ID (0 Untuk Keluar): ")
                     if get_id == 0:
                         print("\nUpdate dibatalkan, kembali ke menu utama.")
                         break
                     for k in my_garage._daftar_kendaraan:
                         if get_id == k.id:
-                            odo_baru = input_angka("Masukkan odometer baru: ")
+                            odo_baru = u.input_angka("Masukkan odometer baru: ")
                             k.update_odo(odo_baru)
                             print("\nOdometer telah diperbarui.")
                             print(f"Odometer: {k._odometer_lama} => {k._odometer}\n")
@@ -148,8 +98,8 @@ def main():
                 os.system("cls")
                 while True:
                     garasi = my_garage.tunjukkan_kendaraan()
-                    vehicle_tabble(garasi)
-                    get_id = input_angka("Masukkan ID (0 Untuk Keluar): ")
+                    u.vehicle_table(garasi)
+                    get_id = u.input_angka("Masukkan ID (0 Untuk Keluar): ")
                     if get_id == 0:
                         print("\nUpdate dibatalkan, kembali ke menu utama.")
                         break
