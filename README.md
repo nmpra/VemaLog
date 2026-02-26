@@ -1,20 +1,20 @@
 # VemaLog (Vehicle Maintenance Log)
 
-VemaLog is a backend-oriented Python project designed to manage vehicle maintenance records such as oil changes and routine services.
+A simple Python project I'm building to track vehicle maintenance like oil changes and routine services. 
+I'm using this project to practice Object-Oriented Programming (OOP) and learn how to structure a real backend project.
 
-The project is currently implemented with a CLI interface for development purposes, and will be migrated to a FastAPI-based REST API as the next step.
+## What it does (so far)
+- **OOP Structure**: Using classes for vehicles and service records.
+- **Validation**: Basic checks for user input to prevent errors.
+- **Service Logic**: Calculates when the next service is due.
+- **CLI Mode**: Currently runs in the terminal for testing the logic.
 
-## Features
-- Object-oriented domain structure
-- Input validation and structured error handling
-- Maintenance interval calculation logic
-- Dummy data loader for testing
-
-## Current Status
-Core domain logic is under development.
-REST API layer (FastAPI) will be added after stabilization.
+## The Plan (Roadmap)
+- [ ] **Migrate to FastAPI**: Turn this CLI tool into a proper REST API.
+- [ ] Add a database to save records permanently.
 
 ## Tech Stack
-- Python 3
-- OOP principles
-- FastAPI (planned)
+- **Python 3.12** (managed with `uv`)
+- **OOP Principles**
+- **FastAPI** (coming soon!)
+- **SQLite** (coming soon!)
