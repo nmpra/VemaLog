@@ -65,6 +65,7 @@ class Garasi:
     def __init__(self):
         self.gid = 1
         self._daftar_kendaraan = []
+        self.capacity = 5
 
     def cari_kendaraan(self, id):
         for k in self._daftar_kendaraan:
@@ -78,7 +79,7 @@ class Garasi:
         return self._daftar_kendaraan
 
     def tambah_kendaraan(self, obj_kendaraan):
-        if len(self._daftar_kendaraan) >= 3:
+        if len(self._daftar_kendaraan) >= self.capacity:
             raise RuntimeError("Garasi anda penuh.")
         obj_kendaraan.id = self.gid
         self._daftar_kendaraan.append(obj_kendaraan)
