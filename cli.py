@@ -32,10 +32,12 @@ def daftar_kendaraan(my_garage):
 def tambah_kendaraan(my_garage):
     os.system("cls")
     while True:
+        print("=== Type '0' to quit ===")
         jenis_kendaraan = u.input_choice(
             "Masukkan jenis kendaraan (Motor/Mobil): ",
-            choices=["Motor", "Mobil"],
+            choices=["Motor", "Mobil", "0"],
         )
+
         if jenis_kendaraan == "Motor":
             nama = u.input_string("Masukkan Nama: ", min_len=3).capitalize()
             cc = u.input_angka("Masukkan CC: ", min_len=2)
@@ -47,11 +49,14 @@ def tambah_kendaraan(my_garage):
             motor = Motor(nama, cc, plat, kategori)
             my_garage.tambah_kendaraan(motor)
             print(
-                f"\nKendaraan {motor.nama} telah berhasil ditambahkan dengan ID {motor.id}."
+                f"\nKendaraan {motor.nama} telah berhasil ditambahkan dengan ID {motor.id}.\n"
             )
 
         elif jenis_kendaraan == "Mobil":
             pass
+
+        elif jenis_kendaraan == "0":
+            break
 
 
 def update_odometer(my_garage):
