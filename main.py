@@ -1,11 +1,11 @@
 # Vehicle Maintenance Log Project
 
 import cli
-from models import Garasi
+from models import Garage
 
 
 def main():
-    my_garage = Garasi()
+    my_garage = Garage()
     cli.run_cli(my_garage)
 
 

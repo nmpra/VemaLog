@@ -1,54 +1,50 @@
 # Utility
 
 
-def input_string(pesan, min_len=0):
+def teks_input(message, min_len=0):
     while True:
-        data = input(pesan).strip()
+        data = input(message).strip()
         if not data:
-            print("Input tidak boleh KOSONG.")
+            print("Input cannot be empty.")
             continue
         if len(data) < min_len:
-            print(f"Input terlalu pendek, minimal {min_len} karakter.")
+            print(f"Input too short, minimum {min_len} characters.")
             continue
         return data
 
 
-def input_angka(pesan, min_len=0):
+def num_input(message, min_len=0):
     while True:
-        data = input(pesan).strip()
+        data = input(message).strip()
         if not data:
-            print("Input tidak boleh KOSONG.")
+            print("Input cannot be empty.")
             continue
         if len(data) < min_len:
-            print(f"Input terlalu pendek, minimal {min_len} karakter.")
+            print(f"Input too short, minimum {min_len} characters.")
             continue
         try:
             return int(data)
         except ValueError:
-            print("Input harus berupa ANGKA.")
+            print("Input must be a number.")
 
 
-def input_choice(pesan, choices):
+def choice_input(message, choices):
     while True:
-        data = input(pesan).capitalize()
+        data = input(message).capitalize()
         if data in choices:
             return data
-        print(f"Input salah, input harus berupa salah satu dari: {', '.join(choices)}")
+        print(f"Invalid input, must be one of: {', '.join(choices)}")
         continue
 
 
 def vehicle_table(vehicle_list):
-    if not vehicle_list:
-        print("There is no vehicle in the garage.")
-        return
-
     print("\n" + "=" * 65)
-    print(f"{"GARASI":^65}")
+    print(f"{"GARAGE":^65}")
     print("=" * 65)
 
-    for k in vehicle_list:
+    for v in vehicle_list:
         print(
-            f"| {str(k.id):<3} | {k.nama:<20} | {str(k.cc):<5}cc | {k.plat:<12} | {k._odometer:<7}km |"
+            f"| {str(v.id):<3} | {v.name:<20} | {str(v.cc):<5}cc | {v.license_plate:<12} | {v._mileage:<7}km |"
         )
 
     print("=" * 65)

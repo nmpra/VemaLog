@@ -1,92 +1,86 @@
 # Models
 
 
-class Kendaraan:
-    def __init__(self, nama, cc, plat, jenis):
-        self.nama = nama
+class Vehicle:
+    def __init__(self, name, cc, license_plate, vehicle_type):
+        self.name = name
         self.cc = cc
-        self.plat = plat
-        self.jenis = jenis
+        self.license_plate = license_plate
+        self.vehicle_type = vehicle_type
 
 
-class Motor(Kendaraan):
-    def __init__(self, nama, cc, plat, kategori):
-        super().__init__(nama, cc, plat, jenis="Motor")
-        self.kategori = kategori
-        self._odometer = 0
-        self._oli_terakhir = 0
-        self._oli_interval = 2000
-        self._maintenance_terakhir = 0
+class Motorcycle(Vehicle):
+    def __init__(self, name, cc, license_plate, transmission):
+        super().__init__(name, cc, license_plate, vehicle_type="Motorcycle")
+        self.transmission = transmission
+        self._mileage = 0
+        self._last_oil_mileage = 0
+        self._oil_change_interval = 2000
+        self._last_maintenance_mileage = 0
+        self.maintenance_interval = 5000
 
-    def update_odo(self, odo_baru):
-        self._odometer_lama = self._odometer
-        if odo_baru < self._odometer:
-            raise ValueError("Odometer baru tidak boleh kurang dari odometer lama!")
-        self._odometer = odo_baru
-        return self._odometer_lama, self._odometer
+    def mileage_update(self, new_mileage):
+        self._prev_mileage = self._mileage
+        if new_mileage < self._mileage:
+            raise ValueError("The new mileage cannot be less than the old mileage!")
+        self._mileage = new_mileage
+        return self._prev_mileage, self._mileage
 
-    def update_oli(self):
-        self._oli_terakhir = self._odometer
-        return self._oli_terakhir
+    def oil_update(self):
+        self._last_oil_mileage = self._mileage
+        return self._last_oil_mileage
 
-    def status_oli(self):
-        if (self._odometer - self._oli_terakhir) >= self._oli_interval:
+    def oil_status(self):
+        if (self._mileage - self._last_oil_mileage) >= self._oil_change_interval:
             return False
         else:
-            jarak_oli = self._oli_interval - (self._odometer - self._oli_terakhir)
-            return True, jarak_oli
+            remaining_mileage = self._oil_change_interval - (
+                self._mileage - self._last_oil_mileage
+            )
+            return True, remaining_mileage
 
-    def update_maintenance(self):
-        self._maintenance_terakhir = self._odometer
-        return self._maintenance_terakhir
+    def maintenance_update(self):
+        self._last_maintenance_mileage = self._mileage
+        return self._last_maintenance_mileage
 
-    def status_maintenance(self):
-        if self.kategori == "Matic":
-            interval_maintenance = 8000
-            if (self._odometer - self._maintenance_terakhir) >= interval_maintenance:
-                return False
-            else:
-                jarak_maintenance = interval_maintenance(
-                    self._odometer - self._maintenance_terakhir
-                )
-                return True, jarak_maintenance
-        elif self.kategori in ["Manual", "Kopling"]:
-            interval_maintenance = 5000
-            if (self._odometer - self._maintenance_terakhir) >= interval_maintenance:
-                return False
-            else:
-                jarak_maintenance = interval_maintenance - (
-                    self._odometer - self._maintenance_terakhir
-                )
-                return True, jarak_maintenance
+    def maintenance_status(self):
+        if (
+            self._mileage - self._last_maintenance_mileage
+        ) >= self.maintenance_interval:
+            return False
+        else:
+            remaining_mileage = self.maintenance_interval - (
+                self._mileage - self._last_maintenance_mileage
+            )
+            return True, remaining_mileage
 
 
-class Garasi:
+class Garage:
     def __init__(self):
         self.gid = 1
-        self._daftar_kendaraan = []
+        self._vehicle_list = []
         self.capacity = 5
 
-    def cari_kendaraan(self, id):
-        for k in self._daftar_kendaraan:
+    def find_vehicle(self, id):
+        for k in self._vehicle_list:
             if k.id == id:
                 return k
         return None
 
-    def tunjukkan_kendaraan(self):
-        if not self._daftar_kendaraan:
-            raise ValueError("Garasi anda kosong.")
-        return self._daftar_kendaraan
+    def get_all_veh(self):
+        if not self._vehicle_list:
+            raise ValueError("You don't have any vehicles in your garage.")
+        return self._vehicle_list
 
-    def tambah_kendaraan(self, obj_kendaraan):
-        if len(self._daftar_kendaraan) >= self.capacity:
-            raise RuntimeError("Garasi anda penuh.")
-        obj_kendaraan.id = self.gid
-        self._daftar_kendaraan.append(obj_kendaraan)
+    def add_vehicle(self, new_vehicle):
+        if len(self._vehicle_list) >= self.capacity:
+            raise RuntimeError("You don't have any more slots in the garage.")
+        new_vehicle.id = self.gid
+        self._vehicle_list.append(new_vehicle)
         self.gid += 1
 
-    def hapus_kendaraan(self, id):
-        target = self.cari_kendaraan(id)
+    def remove_vehicle(self, id):
+        target = self.find_vehicle(id)
         if not target:
-            raise KeyError(f"Kendaraan dengan ID {id} tidak ditemukan.")
-        self._daftar_kendaraan.remove(target)
+            raise KeyError(f"Vehicle with ID {id} could not be found.")
+        self._vehicle_list.remove(target)

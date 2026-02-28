@@ -2,145 +2,149 @@
 
 import os
 import utility as u
-from models import Motor, Garasi
+from models import Motorcycle, Garage
 
 
-def data_dummy(my_garage):
-    motor1 = Motor("Vario 160 eSP+", 160, "H 1234 ABC", "Matic")
-    motor2 = Motor("ZX-25RR", 250, "B 3344 SSS", "Kopling")
-    motor3 = Motor("WR155R", 155, "K 9901 ZZ", "Kopling")
+def dummy_data(my_garage):
+    m1 = Motorcycle("Vario 160 eSP+", 160, "H 1234 ABC", "Automatic")
+    m2 = Motorcycle("ZX-25RR", 250, "B 3344 SSS", "Manual")
+    m3 = Motorcycle("WR155R", 155, "K 9901 ZZ", "Manual")
 
-    my_garage.tambah_kendaraan(motor1)
-    my_garage.tambah_kendaraan(motor2)
-    my_garage.tambah_kendaraan(motor3)
+    my_garage.add_vehicle(m1)
+    my_garage.add_vehicle(m2)
+    my_garage.add_vehicle(m3)
 
-    print("\n[SYSTEM] 3 Data dummy berhasil di-load.")
+    print("\n[SYSTEM] 3 Dummy Data Loaded Successfully.")
 
 
-def daftar_kendaraan(my_garage):
+def vehicle_list(my_garage):
     os.system("cls")
-    garasi = my_garage.tunjukkan_kendaraan()
-    u.vehicle_table(garasi)
+    Garage = my_garage.get_all_veh()
+    u.vehicle_table(Garage)
     while True:
-        keluar = u.input_angka("Ketik '0' untuk keluar: ")
+        keluar = u.num_input("Type '0' to quit: ")
         if keluar == 0:
             break
         else:
-            print("Input salah!")
+            print("Wrong input!")
 
 
-def tambah_kendaraan(my_garage):
+def add_vehicle(my_garage):
     os.system("cls")
     while True:
-        print("=== Type '0' to quit ===")
-        jenis_kendaraan = u.input_choice(
-            "Masukkan jenis kendaraan (Motor/Mobil): ",
-            choices=["Motor", "Mobil", "0"],
+        print("=== Type '0' to quit")
+        vehicle_type = u.choice_input(
+            "Choice Vehicle Type (Motorcycle/Car): ",
+            choices=["Motorcycle", "Car", "0"],
         )
 
-        if jenis_kendaraan == "Motor":
-            nama = u.input_string("Masukkan Nama: ", min_len=3).capitalize()
-            cc = u.input_angka("Masukkan CC: ", min_len=2)
-            plat = u.input_string("Masukkan Plat Nomor:: ", min_len=3).upper()
-            kategori = u.input_choice(
-                "Masukkan Kategori (Matic/Manual/Kopling): ",
-                choices=["Matic", "Manual", "Kopling"],
+        if vehicle_type == "Motorcycle":
+            name = u.teks_input("Input Vehicle Name: ", min_len=3).capitalize()
+            cc = u.num_input("Input Cylinder Capacity: ", min_len=2)
+            license_plate = u.teks_input(
+                "Input License Plate Number: ", min_len=3
+            ).upper()
+            transmission = u.choice_input(
+                "Input Transmission Type (Automatic/Manual): ",
+                choices=["Automatic", "Manual"],
             )
-            motor = Motor(nama, cc, plat, kategori)
-            my_garage.tambah_kendaraan(motor)
-            print(
-                f"\nKendaraan {motor.nama} telah berhasil ditambahkan dengan ID {motor.id}.\n"
-            )
+            m = Motorcycle(name, cc, license_plate, transmission)
+            my_garage.add_vehicle(m)
+            print(f"\n{m.name} added successfully (ID: {m.id})\n")
 
-        elif jenis_kendaraan == "Mobil":
+        elif vehicle_type == "Car":
             pass
 
-        elif jenis_kendaraan == "0":
+        elif vehicle_type == "0":
             break
 
 
-def update_odometer(my_garage):
+def mileage_update(my_garage):
     os.system("cls")
     while True:
-        garasi = my_garage.tunjukkan_kendaraan()
-        u.vehicle_table(garasi)
-        get_id = u.input_angka("Masukkan ID (0 Untuk Keluar): ")
+        Garage = my_garage.get_all_veh()
+        u.vehicle_table(Garage)
+        get_id = u.num_input("Input Vehicle ID (0 To Quit): ")
         if get_id == 0:
-            print("\nUpdate dibatalkan, kembali ke menu utama.")
+            print("\nUpdate cancelled, return to main menu...")
             break
-        for k in my_garage._daftar_kendaraan:
-            if get_id == k.id:
-                odo_baru = u.input_angka("Masukkan odometer baru: ")
-                k.update_odo(odo_baru)
-                print("\nOdometer telah diperbarui.")
-                print(f"Odometer: {k._odometer_lama} => {k._odometer}\n")
+        for v in my_garage._vehicle_list:
+            if get_id == v.id:
+                new_mileage = u.num_input("Input New Vehicle Mileage: ")
+                v.mileage_update(new_mileage)
+                print("\nMileage Updated.")
+                print(f"Mileage: {v._prev_mileage}km => {v._mileage}km")
                 break
         else:
-            print(f"Kendaraan dengan ID {get_id} tidak ditemukan.")
+            print(f"Vehicle with ID {get_id} not found.")
 
 
-def cek_status(my_garage):
+def vehicle_status(my_garage):
     os.system("cls")
     while True:
-        garasi = my_garage.tunjukkan_kendaraan()
-        u.vehicle_table(garasi)
-        get_id = u.input_angka("Masukkan ID (0 Untuk Keluar): ")
+        Garage = my_garage.get_all_veh()
+        u.vehicle_table(Garage)
+        get_id = u.num_input("Input Vehicle ID (0 To Quit): ")
         if get_id == 0:
-            print("\nUpdate dibatalkan, kembali ke menu utama.")
+            print("\nUpdate cancelled, return to main menu...")
             break
-        for k in my_garage._daftar_kendaraan:
-            if get_id == k.id:
-                k.status_oli()
-                if not k.status_oli():
+        for v in my_garage._vehicle_list:
+            if get_id == v.id:
+                v.oil_status()
+                if not v.oil_status():
                     print(
-                        f"Penting! Jangan lupa ganti oli jir udah terlewat {k._odometer - k._oli_terakhir}km ini"
+                        f"Warning! Oil change required. Overdue by {v._mileage - v._last_oil_mileage} km."
                     )
                 else:
-                    print(f"Aman aja, masih sisa {k.jarak_oli}km lagi kok!")
-                k.status_maintenance()
-                if not k.status_maintenance():
                     print(
-                        "Penting! Segera ke bengkel untuk maintenance berkala kendaraan."
+                        f"Status: Safe. {v.remaining_mileage} km remaining until next oil change."
+                    )
+                v.maintenance_status()
+                if not v.maintenance_status():
+                    print(
+                        f"Warning! Maintenance required. Overdue by {v._mileage - v._last_maintenance_mileage} km."
                     )
                 else:
-                    print(f"Aman aja, masih sisa {k.jarak_maintenance}km lagi kok!")
+                    print(
+                        f"Status: Safe. {v.remaining_mileage} km remaining until next maintenance."
+                    )
                 break
         else:
-            print(f"Kendaraan dengan ID {get_id} tidak ditemukan.")
+            print(f"Vehicle with ID {get_id} not found.")
 
 
 def run_cli(my_garage):
-    my_garage = Garasi()
-    data_dummy(my_garage)
+    my_garage = Garage()
+    dummy_data(my_garage)
 
     while True:
 
         try:
             print("\n" + "=" * 40)
-            print("      VEHICLE MAINTENANCE TRACKER")
+            print(f"{"VEHICLE MAINTENANCE LOG":^40}")
             print("=" * 40)
-            print("1. Lihat Daftar Garasi")
-            print("2. Tambah Kendaraan Baru")
-            print("3. Update Odometer")
-            print("4. Cek Status Oli & Maintenance")
-            print("5. Catat Ganti Oli/Maintenance")
-            print("6. Hapus Kendaraan")
-            print("0. Keluar")
+            print("1. Show Vehicles In Garage")
+            print("2. Add New Vehicles")
+            print("3. Update Vehicle Mileage")
+            print("4. Show Vehicles Status")
+            print("5. Update Vehicle Status")
+            print("6. Remove Vehicles")
+            print("0. Close Program")
             print("=" * 40)
 
-            pilihan = input("Pilih Menu (0-6): ")
+            pilihan = input("Choice Menu (0-6): ")
 
             if pilihan == "1":
-                daftar_kendaraan(my_garage)
+                vehicle_list(my_garage)
 
             elif pilihan == "2":
-                tambah_kendaraan(my_garage)
+                add_vehicle(my_garage)
 
             elif pilihan == "3":
-                update_odometer(my_garage)
+                mileage_update(my_garage)
 
             elif pilihan == "4":
-                cek_status(my_garage)
+                vehicle_status(my_garage)
 
             elif pilihan == "5":
                 pass
@@ -149,11 +153,11 @@ def run_cli(my_garage):
                 pass
 
             elif pilihan == "0":
-                print("\nProgram ditutup.")
+                print("\nProgram closed.")
                 break
 
             else:
-                print("\nPilihan tidak valid.")
+                print("\nInvalid choice.")
 
         except Exception as e:
-            print(f"\nError! Pesan: {e}")
+            print(f"\nError! Message: {e}")
