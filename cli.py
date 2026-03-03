@@ -130,6 +130,7 @@ def status_update(my_garage):
                     m.oil_update(v)
                     print("Oil Change Mileage Successfully Updated.")
                     print(f"Current Mileage: {v._last_oil_mileage}km")
+                    break
             else:
                 print(f"Vehicle with ID {get_id} not found.")
 
@@ -140,6 +141,7 @@ def status_update(my_garage):
                     m.maintenance_update(v)
                     print("Maintenance Mileage Successfully Updated.")
                     print(f"Current Mileage: {v._last_oil_mileage}km")
+                    break
             else:
                 print(f"Vehicle with ID {get_id} not found.")
 
@@ -148,6 +150,32 @@ def status_update(my_garage):
 
         else:
             print("Wrong Input. Please Choice The Right Input Choises!")
+
+
+def remove_vehicle(my_garage):
+    os.system("cls")
+    while True:
+        Garage = my_garage.get_all_veh()
+        u.vehicle_table(Garage)
+        get_id = u.num_input("Input Vehicle ID (0 To Quit): ")
+        if get_id == 0:
+            print("\nUpdate cancelled, return to main menu...")
+            break
+        for v in my_garage._vehicle_list:
+            if get_id == v.id:
+                validation = u.choice_input(
+                    "Are You Sure You Want To Remove This Vehicle (Y/N): ",
+                    choices=["Y", "N"],
+                )
+                if validation == "Y":
+                    my_garage.remove_vehicle(get_id)
+                    print(f"Vehicle with ID {get_id} has been removed.")
+                    break
+                elif validation == "N":
+                    print("Update Cancelled, return to main menu...")
+                    break
+        else:
+            print(f"Vehicle with ID {get_id} not found.")
 
 
 def run_cli(my_garage):
@@ -186,7 +214,7 @@ def run_cli(my_garage):
                 status_update(my_garage)
 
             elif pilihan == "6":
-                pass
+                remove_vehicle(my_garage)
 
             elif pilihan == "0":
                 print("\nProgram closed.")
