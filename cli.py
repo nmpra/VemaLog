@@ -114,8 +114,43 @@ def vehicle_status(my_garage):
             print(f"Vehicle with ID {get_id} not found.")
 
 
+def status_update(my_garage):
+    os.system("cls")
+    while True:
+        Garage = my_garage.get_all_veh()
+        u.vehicle_table(Garage)
+        print("\n1. Update Vehicle Oil Change Mileage.")
+        print("2. Update Vehicle Maintenance Mileage.")
+        choice = u.num_input("Input Your Choice (0 To Quit): ")
+
+        if choice == 1:
+            get_id = u.num_input("=== Input Vehicle ID: ")
+            for v in my_garage._vehicle_list:
+                if get_id == v.id:
+                    m.oil_update(v)
+                    print("Oil Change Mileage Successfully Updated.")
+                    print(f"Current Mileage: {v._last_oil_mileage}km")
+            else:
+                print(f"Vehicle with ID {get_id} not found.")
+
+        elif choice == 2:
+            get_id = u.num_input("=== Input Vehicle ID: ")
+            for v in my_garage._vehicle_list:
+                if get_id == v.id:
+                    m.maintenance_update(v)
+                    print("Maintenance Mileage Successfully Updated.")
+                    print(f"Current Mileage: {v._last_oil_mileage}km")
+            else:
+                print(f"Vehicle with ID {get_id} not found.")
+
+        elif choice == 0:
+            break
+
+        else:
+            print("Wrong Input. Please Choice The Right Input Choises!")
+
+
 def run_cli(my_garage):
-    my_garage = Garage()
     dummy_data(my_garage)
 
     while True:
@@ -148,7 +183,7 @@ def run_cli(my_garage):
                 vehicle_status(my_garage)
 
             elif pilihan == "5":
-                pass
+                status_update(my_garage)
 
             elif pilihan == "6":
                 pass
