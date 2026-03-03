@@ -3,6 +3,7 @@
 import os
 import utility as u
 from models import Motorcycle, Garage
+from service import MaintenanceLogic as m
 
 
 def dummy_data(my_garage):
@@ -71,7 +72,7 @@ def mileage_update(my_garage):
         for v in my_garage._vehicle_list:
             if get_id == v.id:
                 new_mileage = u.num_input("Input New Vehicle Mileage: ")
-                v.mileage_update(new_mileage)
+                m.mileage_update(v, new_mileage)
                 print("\nMileage Updated.")
                 print(f"Mileage: {v._prev_mileage}km => {v._mileage}km")
                 break
@@ -90,23 +91,23 @@ def vehicle_status(my_garage):
             break
         for v in my_garage._vehicle_list:
             if get_id == v.id:
-                v.oil_status()
-                if not v.oil_status():
+                status, mileage = m.oil_status(v)
+                if not status:
                     print(
                         f"Warning! Oil change required. Overdue by {v._mileage - v._last_oil_mileage} km."
                     )
                 else:
                     print(
-                        f"Status: Safe. {v.remaining_mileage} km remaining until next oil change."
+                        f"Status: Safe. {mileage} km remaining until next oil change."
                     )
-                v.maintenance_status()
-                if not v.maintenance_status():
+                status, mileage = m.maintenance_status(v)
+                if not status:
                     print(
                         f"Warning! Maintenance required. Overdue by {v._mileage - v._last_maintenance_mileage} km."
                     )
                 else:
                     print(
-                        f"Status: Safe. {v.remaining_mileage} km remaining until next maintenance."
+                        f"Status: Safe. {mileage} km remaining until next maintenance."
                     )
                 break
         else:
