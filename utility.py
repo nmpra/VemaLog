@@ -1,7 +1,7 @@
 # Utility
 
 
-def teks_input(message, min_len=0):
+def text_input(message, min_len=0):
     while True:
         data = input(message).strip()
         if not data:

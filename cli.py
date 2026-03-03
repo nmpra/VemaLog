@@ -40,9 +40,9 @@ def add_vehicle(my_garage):
         )
 
         if vehicle_type == "Motorcycle":
-            name = u.teks_input("Input Vehicle Name: ", min_len=3).capitalize()
+            name = u.text_input("Input Vehicle Name: ", min_len=3).capitalize()
             cc = u.num_input("Input Cylinder Capacity: ", min_len=2)
-            license_plate = u.teks_input(
+            license_plate = u.text_input(
                 "Input License Plate Number: ", min_len=3
             ).upper()
             transmission = u.choice_input(
