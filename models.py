@@ -19,41 +19,6 @@ class Motorcycle(Vehicle):
         self._last_maintenance_mileage = 0
         self.maintenance_interval = 5000
 
-    def mileage_update(self, new_mileage):
-        self._prev_mileage = self._mileage
-        if new_mileage < self._mileage:
-            raise ValueError("The new mileage cannot be less than the old mileage!")
-        self._mileage = new_mileage
-        return self._prev_mileage, self._mileage
-
-    def oil_update(self):
-        self._last_oil_mileage = self._mileage
-        return self._last_oil_mileage
-
-    def oil_status(self):
-        if (self._mileage - self._last_oil_mileage) >= self._oil_change_interval:
-            return False
-        else:
-            remaining_mileage = self._oil_change_interval - (
-                self._mileage - self._last_oil_mileage
-            )
-            return True, remaining_mileage
-
-    def maintenance_update(self):
-        self._last_maintenance_mileage = self._mileage
-        return self._last_maintenance_mileage
-
-    def maintenance_status(self):
-        if (
-            self._mileage - self._last_maintenance_mileage
-        ) >= self.maintenance_interval:
-            return False
-        else:
-            remaining_mileage = self.maintenance_interval - (
-                self._mileage - self._last_maintenance_mileage
-            )
-            return True, remaining_mileage
-
 
 class Garage:
     def __init__(self):
