@@ -2,7 +2,7 @@
 
 import os
 import utility as u
-from models import Motorcycle, Garage
+from models import Motorcycle, Car
 from service import MaintenanceLogic as m
 
 
@@ -10,12 +10,14 @@ def dummy_data(my_garage):
     m1 = Motorcycle("Vario 160 eSP+", 160, "H 1234 ABC", "Automatic")
     m2 = Motorcycle("ZX-25RR", 250, "B 3344 SSS", "Manual")
     m3 = Motorcycle("WR155R", 155, "K 9901 ZZ", "Manual")
+    c1 = Car("Innova Venturer", 2400, "AD 1 ABC", "Automatic")
 
     my_garage.add_vehicle(m1)
     my_garage.add_vehicle(m2)
     my_garage.add_vehicle(m3)
+    my_garage.add_vehicle(c1)
 
-    print("\n[SYSTEM] 3 Dummy Data Loaded Successfully.")
+    print("\n[SYSTEM] 4 Dummy Data Loaded Successfully.")
 
 
 def vehicle_list(my_garage):
@@ -54,7 +56,18 @@ def add_vehicle(my_garage):
             print(f"\n{m.name} added successfully (ID: {m.id})\n")
 
         elif vehicle_type == "Car":
-            pass
+            name = u.text_input("Input Vehicle Name: ", min_len=3).capitalize()
+            cc = u.num_input("Input Cylinder Capacity: ", min_len=3)
+            license_plate = u.text_input(
+                "Input License Plate Number: ", min_len=3
+            ).upper()
+            transmission = u.choice_input(
+                "Input Transmission Type (Automatic/Manual): ",
+                choices=["Automatic", "Manual"],
+            )
+            c = Car(name, cc, license_plate, transmission)
+            my_garage.add_vehicle(c)
+            print(f"\n{c.name} added successfully (ID: {c.id})\n")
 
         elif vehicle_type == "0":
             break

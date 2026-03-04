@@ -20,6 +20,17 @@ class Motorcycle(Vehicle):
         self.maintenance_interval = 5000
 
 
+class Car(Vehicle):
+    def __init__(self, name, cc, license_plate, transmission):
+        super().__init__(name, cc, license_plate, vehicle_type="Car")
+        self.transmission = transmission
+        self._mileage = 0
+        self._last_oil_mileage = 0
+        self._oil_change_interval = 5000
+        self._last_maintenance_mileage = 0
+        self.maintenance_interval = 10000
+
+
 class Garage:
     def __init__(self):
         self.gid = 1
