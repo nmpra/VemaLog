@@ -25,9 +25,23 @@ def vehicle_list(my_garage):
     Garage = my_garage.get_all_veh()
     u.vehicle_table(Garage)
     while True:
-        keluar = u.num_input("Type '0' to quit: ")
-        if keluar == 0:
+        print("0. Back To Main Menu,")
+        print("1. Show Vehicle Detail.")
+        choice = u.num_input("Input Your Choice: ")
+        if choice == 0:
             break
+        elif choice == 1:
+            get_id = u.num_input("=== Input Vehicle ID: ")
+            for v in my_garage._vehicle_list:
+                if get_id == v.id:
+                    print("\n" + "=" * 92)
+                    print(f"{"VEHIclE DETAIL":^92}")
+                    print("=" * 92)
+                    print(
+                        f"| {str(v.id):<3} | {v.name:<20} | {str(v.cc):<5}cc | {v.license_plate:<12} | {v._mileage:<7}km | {v._last_oil_mileage:<7}km | {v._last_maintenance_mileage:<7}km |"
+                    )
+                    print("=" * 92 + "\n")
+                    break
         else:
             print("Wrong input!")
 
