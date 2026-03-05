@@ -34,13 +34,18 @@ def vehicle_list(my_garage):
             get_id = u.num_input("=== Input Vehicle ID: ")
             for v in my_garage._vehicle_list:
                 if get_id == v.id:
-                    print("\n" + "=" * 92)
-                    print(f"{"VEHIclE DETAIL":^92}")
-                    print("=" * 92)
+                    print("\n" + "=" * 67)
+                    print(f"{"VEHIclE DETAIL":^67}")
+                    print("=" * 67)
                     print(
-                        f"| {str(v.id):<3} | {v.name:<20} | {str(v.cc):<5}cc | {v.license_plate:<12} | {v._mileage:<7}km | {v._last_oil_mileage:<7}km | {v._last_maintenance_mileage:<7}km |"
+                        f"| {str(v.id):<3} | {v.name:<20} | {str(v.cc):<5}cc | {v.license_plate:<12} | {v._mileage:<7}km |"
                     )
-                    print("=" * 92 + "\n")
+                    print("=" * 67)
+                    print(f"| {"Last Oil Change":<25} | {v._last_oil_mileage:<7}km |")
+                    print(
+                        f"| {"Last Vehicle Maintenance":<25} | {v._last_maintenance_mileage:<7}km |"
+                    )
+                    print("=" * 41 + "\n")
                     break
         else:
             print("Wrong input!")
