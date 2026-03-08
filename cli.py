@@ -20,33 +20,62 @@ def dummy_data(my_garage):
     print("\n[SYSTEM] 4 Dummy Data Loaded Successfully.")
 
 
+def vehicle_detail(my_garage):
+    get_id = u.num_input("= Input Vehicle ID: ")
+    for v in my_garage._vehicle_list:
+        if get_id == v.id:
+            print("\n" + "=" * 67)
+            print(f"{"VEHIclE DETAIL":^67}")
+            print("=" * 67)
+            print(
+                f"| {str(v.id):<3} | {v.name:<20} | {str(v.cc):<5}cc | {v.license_plate:<12} | {v._mileage:<7}km |"
+            )
+            print("=" * 67)
+            print(f"| {"Last Oil Change":<25} | {v._last_oil_mileage:<7}km |")
+            print(
+                f"| {"Last Vehicle Maintenance":<25} | {v._last_maintenance_mileage:<7}km |"
+            )
+            print("=" * 41)
+            break
+
+
+def change_veh_name(my_garage):
+    get_id = u.num_input("= Input Vehicle ID: ")
+    for v in my_garage._vehicle_list:
+        if get_id == v.id:
+            new_name = u.text_input("== Input New Vehicle Name: ")
+            validation = u.choice_input(
+                "=== Confirm Vehicle Name Change (Y/N): ",
+                choices=["Y", "N"],
+            ).upper()
+            if validation == "Y":
+                if len(new_name) < 3:
+                    print("\nVehicle name can't be less than 3 characters!\n")
+                    break
+                print("\nVehicle Name Updated Sucsessfuly!")
+                print(f"{v.name} => {new_name}\n")
+                v.name = new_name
+            elif validation == "N":
+                print("\nUpdate cancelled, return to main menu...\n")
+                break
+            break
+
+
 def vehicle_list(my_garage):
     os.system("cls")
     Garage = my_garage.get_all_veh()
     u.vehicle_table(Garage)
     while True:
-        print("0. Back To Main Menu,")
+        print("0. Back To Main Menu.")
         print("1. Show Vehicle Detail.")
+        print("2. Change Vehicle Name.")
         choice = u.num_input("Input Your Choice: ")
         if choice == 0:
             break
         elif choice == 1:
-            get_id = u.num_input("=== Input Vehicle ID: ")
-            for v in my_garage._vehicle_list:
-                if get_id == v.id:
-                    print("\n" + "=" * 67)
-                    print(f"{"VEHIclE DETAIL":^67}")
-                    print("=" * 67)
-                    print(
-                        f"| {str(v.id):<3} | {v.name:<20} | {str(v.cc):<5}cc | {v.license_plate:<12} | {v._mileage:<7}km |"
-                    )
-                    print("=" * 67)
-                    print(f"| {"Last Oil Change":<25} | {v._last_oil_mileage:<7}km |")
-                    print(
-                        f"| {"Last Vehicle Maintenance":<25} | {v._last_maintenance_mileage:<7}km |"
-                    )
-                    print("=" * 41 + "\n")
-                    break
+            vehicle_detail(my_garage)
+        elif choice == 2:
+            change_veh_name(my_garage)
         else:
             print("Wrong input!")
 
