@@ -1,13 +1,8 @@
-# Vehicle Maintenance Log Project
+from fastapi import FastAPI
 
-import cli
-from models import Garage
-
-
-def main():
-    my_garage = Garage()
-    cli.run_cli(my_garage)
+app = FastAPI()
 
 
-if __name__ == "__main__":
-    main()
+@app.get("/vehicles")
+def get_all_vehicles():
+    return {"status": "VemaLog API is running!"}
