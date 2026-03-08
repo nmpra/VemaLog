@@ -17,7 +17,7 @@ class Motorcycle(Vehicle):
         self._last_oil_mileage = 0
         self._oil_change_interval = 2000
         self._last_maintenance_mileage = 0
-        self.maintenance_interval = 5000
+        self._maintenance_interval = 5000
 
 
 class Car(Vehicle):
@@ -28,7 +28,7 @@ class Car(Vehicle):
         self._last_oil_mileage = 0
         self._oil_change_interval = 5000
         self._last_maintenance_mileage = 0
-        self.maintenance_interval = 10000
+        self._maintenance_interval = 10000
 
 
 class Garage:
