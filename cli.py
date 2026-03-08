@@ -22,43 +22,41 @@ def dummy_data(my_garage):
 
 def vehicle_detail(my_garage):
     get_id = u.num_input("= Input Vehicle ID: ")
-    for v in my_garage._vehicle_list:
-        if get_id == v.id:
-            print("\n" + "=" * 67)
-            print(f"{"VEHIclE DETAIL":^67}")
-            print("=" * 67)
-            print(
-                f"| {str(v.id):<3} | {v.name:<20} | {str(v.cc):<5}cc | {v.license_plate:<12} | {v._mileage:<7}km |"
-            )
-            print("=" * 67)
-            print(f"| {"Last Oil Change":<25} | {v._last_oil_mileage:<7}km |")
-            print(
-                f"| {"Last Vehicle Maintenance":<25} | {v._last_maintenance_mileage:<7}km |"
-            )
-            print("=" * 41)
-            break
+    v = my_garage.find_vehicle(get_id)
+    if v:
+        print("\n" + "=" * 67)
+        print(f"{"VEHIclE DETAIL":^67}")
+        print("=" * 67)
+        print(
+            f"| {str(v.id):<3} | {v.name:<20} | {str(v.cc):<5}cc | {v.license_plate:<12} | {v._mileage:<7}km |"
+        )
+        print("=" * 67)
+        print(f"| {"Last Oil Change":<25} | {v._last_oil_mileage:<7}km |")
+        print(
+            f"| {"Last Vehicle Maintenance":<25} | {v._last_maintenance_mileage:<7}km |"
+        )
+        print("=" * 41)
+    else:
+        print(f"Vehicle with ID {id} could not be found.")
 
 
 def change_veh_name(my_garage):
     get_id = u.num_input("= Input Vehicle ID: ")
-    for v in my_garage._vehicle_list:
-        if get_id == v.id:
-            new_name = u.text_input("== Input New Vehicle Name: ")
-            validation = u.choice_input(
-                "=== Confirm Vehicle Name Change (Y/N): ",
-                choices=["Y", "N"],
-            ).upper()
-            if validation == "Y":
-                if len(new_name) < 3:
-                    print("\nVehicle name can't be less than 3 characters!\n")
-                    break
-                print("\nVehicle Name Updated Sucsessfuly!")
-                print(f"{v.name} => {new_name}\n")
-                v.name = new_name
-            elif validation == "N":
-                print("\nUpdate cancelled, return to main menu...\n")
-                break
-            break
+    v = my_garage.find_vehicle(get_id)
+    if v:
+        new_name = u.text_input("== Input New Vehicle Name: ")
+        validation = u.choice_input(
+            "=== Confirm Vehicle Name Change (Y/N): ",
+            choices=["Y", "N"],
+        ).upper()
+        if validation == "Y":
+            if len(new_name) < 3:
+                print("\nVehicle name can't be less than 3 characters!\n")
+            print("\nVehicle Name Updated Sucsessfuly!")
+            print(f"{v.name} => {new_name}\n")
+            v.name = new_name
+        elif validation == "N":
+            print("\nUpdate cancelled, return to main menu...\n")
 
 
 def vehicle_list(my_garage):
@@ -130,13 +128,13 @@ def mileage_update(my_garage):
         if get_id == 0:
             print("\nUpdate cancelled, return to main menu...")
             break
-        for v in my_garage._vehicle_list:
-            if get_id == v.id:
-                new_mileage = u.num_input("Input New Vehicle Mileage: ")
-                m.mileage_update(v, new_mileage)
-                print("\nMileage Updated.")
-                print(f"Mileage: {v._prev_mileage}km => {v._mileage}km")
-                break
+        v = my_garage.find_vehicle(get_id)
+        if v:
+            new_mileage = u.num_input("Input New Vehicle Mileage: ")
+            m.mileage_update(v, new_mileage)
+            print("\nMileage Updated.")
+            print(f"Mileage: {v._prev_mileage}km => {v._mileage}km")
+            break
         else:
             print(f"Vehicle with ID {get_id} not found.")
 
@@ -150,27 +148,23 @@ def vehicle_status(my_garage):
         if get_id == 0:
             print("\nUpdate cancelled, return to main menu...")
             break
-        for v in my_garage._vehicle_list:
-            if get_id == v.id:
-                status, mileage = m.oil_status(v)
-                if not status:
-                    print(
-                        f"Warning! Oil change required. Overdue by {v._mileage - v._last_oil_mileage} km."
-                    )
-                else:
-                    print(
-                        f"Status: Safe. {mileage} km remaining until next oil change."
-                    )
-                status, mileage = m.maintenance_status(v)
-                if not status:
-                    print(
-                        f"Warning! Maintenance required. Overdue by {v._mileage - v._last_maintenance_mileage} km."
-                    )
-                else:
-                    print(
-                        f"Status: Safe. {mileage} km remaining until next maintenance."
-                    )
-                break
+        v = my_garage.find_vehicle(get_id)
+        if v:
+            status, mileage = m.oil_status(v)
+            if not status:
+                print(
+                    f"Warning! Oil change required. Overdue by {v._mileage - v._last_oil_mileage} km."
+                )
+            else:
+                print(f"Status: Safe. {mileage} km remaining until next oil change.")
+            status, mileage = m.maintenance_status(v)
+            if not status:
+                print(
+                    f"Warning! Maintenance required. Overdue by {v._mileage - v._last_maintenance_mileage} km."
+                )
+            else:
+                print(f"Status: Safe. {mileage} km remaining until next maintenance.")
+            break
         else:
             print(f"Vehicle with ID {get_id} not found.")
 
@@ -186,23 +180,23 @@ def status_update(my_garage):
 
         if choice == 1:
             get_id = u.num_input("=== Input Vehicle ID: ")
-            for v in my_garage._vehicle_list:
-                if get_id == v.id:
-                    m.oil_update(v)
-                    print("Oil Change Mileage Successfully Updated.")
-                    print(f"Current Mileage: {v._last_oil_mileage}km")
-                    break
+            v = my_garage.find_vehicle(get_id)
+            if v:
+                m.oil_update(v)
+                print("Oil Change Mileage Successfully Updated.")
+                print(f"Current Mileage: {v._last_oil_mileage}km")
+                break
             else:
                 print(f"Vehicle with ID {get_id} not found.")
 
         elif choice == 2:
             get_id = u.num_input("=== Input Vehicle ID: ")
-            for v in my_garage._vehicle_list:
-                if get_id == v.id:
-                    m.maintenance_update(v)
-                    print("Maintenance Mileage Successfully Updated.")
-                    print(f"Current Mileage: {v._last_oil_mileage}km")
-                    break
+            v = my_garage.find_vehicle(get_id)
+            if v:
+                m.maintenance_update(v)
+                print("Maintenance Mileage Successfully Updated.")
+                print(f"Current Mileage: {v._last_oil_mileage}km")
+                break
             else:
                 print(f"Vehicle with ID {get_id} not found.")
 
@@ -222,19 +216,19 @@ def remove_vehicle(my_garage):
         if get_id == 0:
             print("\nUpdate cancelled, return to main menu...")
             break
-        for v in my_garage._vehicle_list:
-            if get_id == v.id:
-                validation = u.choice_input(
-                    "Are You Sure You Want To Remove This Vehicle (Y/N): ",
-                    choices=["Y", "N"],
-                )
-                if validation == "Y":
-                    my_garage.remove_vehicle(get_id)
-                    print(f"Vehicle with ID {get_id} has been removed.")
-                    break
-                elif validation == "N":
-                    print("Update Cancelled, return to main menu...")
-                    break
+        v = my_garage.find_vehicle(get_id)
+        if v:
+            validation = u.choice_input(
+                "Are You Sure You Want To Remove This Vehicle (Y/N): ",
+                choices=["Y", "N"],
+            )
+            if validation == "Y":
+                my_garage.remove_vehicle(get_id)
+                print(f"Vehicle with ID {get_id} has been removed.")
+                break
+            elif validation == "N":
+                print("Update Cancelled, return to main menu...")
+                break
         else:
             print(f"Vehicle with ID {get_id} not found.")
 

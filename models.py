@@ -34,29 +34,25 @@ class Car(Vehicle):
 class Garage:
     def __init__(self):
         self.gid = 1
-        self._vehicle_list = []
+        self._vehicles = {}
         self.capacity = 5
 
     def find_vehicle(self, id):
-        for k in self._vehicle_list:
-            if k.id == id:
-                return k
-        return None
+        return self._vehicles.get(id)
 
     def get_all_veh(self):
-        if not self._vehicle_list:
+        if not self._vehicles:
             raise ValueError("You don't have any vehicles in your garage.")
-        return self._vehicle_list
+        return list(self._vehicles.values())
 
     def add_vehicle(self, new_vehicle):
-        if len(self._vehicle_list) >= self.capacity:
+        if len(self._vehicles) >= self.capacity:
             raise RuntimeError("You don't have any more slots in the garage.")
         new_vehicle.id = self.gid
-        self._vehicle_list.append(new_vehicle)
+        self._vehicles[new_vehicle.id] = new_vehicle
         self.gid += 1
 
     def remove_vehicle(self, id):
-        target = self.find_vehicle(id)
-        if not target:
+        if id not in self._vehicles:
             raise KeyError(f"Vehicle with ID {id} could not be found.")
-        self._vehicle_list.remove(target)
+        del self._vehicles[id]
